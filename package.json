@@ -9,10 +9,12 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@mergeapi/react-agent-handler-link": "^0.0.6",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
     "motion": "^12.42.2",
     "next": "16.2.12",
+    "next-auth": "^4.24.15",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "three": "^0.185.1"
@@ -26,5 +28,9 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.10"
+  },
+  "overrides": {
+    "postcss": "8.5.23",
+    "sharp": "0.35.3"
   }
 }

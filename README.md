@@ -217,6 +217,39 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+### Separate live Calendar integration
+
+The production-shaped Merge integration is isolated at
+[http://localhost:3000/merge-demo](http://localhost:3000/merge-demo), so the
+fixture-backed presentation at `/` remains reliable.
+
+The page requires Google OAuth plus a Merge Agent Handler Tool Pack containing
+the `google-calendar` connector and its read-only `list_events` tool. Copy
+`.env.example` to `.env.local` and configure:
+
+- `AUTH_SECRET`, `AUTH_GOOGLE_ID`, and `AUTH_GOOGLE_SECRET`;
+- `MERGE_AGENT_HANDLER_KEY` and `MERGE_TOOL_PACK_ID`; and
+- an independent, random `MERGE_USER_ID_SECRET` of at least 32 characters.
+
+Use `/api/auth/callback/google` as the Google OAuth callback path. Add both the
+local URL and the deployed HTTPS URL to Google Cloud. Never commit `.env.local`
+or paste credentials into client-side variables. Set `NEXTAUTH_URL` to the
+canonical public HTTPS origin in every proxied deployment so same-origin checks
+do not rely on an internal proxy URL.
+
+Each signed-in person receives a pseudonymous, isolated Merge Registered User.
+The browser receives a short-lived, single-use Link token plus an encrypted,
+HttpOnly, user-bound handle needed for profile and deletion requests. The
+server calls Calendar for a bounded 30-day window, immediately reduces events
+to aggregate timing signals, and returns no event titles, descriptions,
+locations, attendee identities, plaintext Merge user IDs, or MCP URLs. Slack
+and Drive remain visibly labeled sample signals on this page.
+
+For a public deployment, enable a distributed edge or platform rate limit in
+addition to the included per-process guard. After installing deployment
+secrets, complete one real Google sign-in, Calendar Link, aggregate-profile, and
+account-deletion smoke test before sharing the URL.
+
 Run validation with:
 
 ```bash
