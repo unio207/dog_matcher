@@ -1,0 +1,11 @@
+Model Information:
+* title:	low poly dog pack
+* source:	https://sketchfab.com/3d-models/low-poly-dog-pack-b27eaa571da14c3b93bf664fe7d950c8
+* author:	compost the second (https://sketchfab.com/compostthesecond)
+
+Model License:
+* license type:	CC-BY-SA-4.0 (http://creativecommons.org/licenses/by-sa/4.0/)
+* requirements:	Author must be credited. Modified versions must have the same license. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "low poly dog pack" (https://sketchfab.com/3d-models/low-poly-dog-pack-b27eaa571da14c3b93bf664fe7d950c8) by compost the second (https://sketchfab.com/compostthesecond) licensed under CC-BY-SA-4.0 (http://creativecommons.org/licenses/by-sa/4.0/)
