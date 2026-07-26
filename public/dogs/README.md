@@ -1,5 +1,5 @@
 # Dog photos
 
-Place replacement `.jpg` files in this directory. Filenames must match the
-lowercase dog IDs configured in `src/data/dogs.ts`; the complete current list is
-documented in the root README.
+Demo dog photos live in this directory. Filenames match the lowercase dog IDs
+configured in `src/data/dogs.ts`; the complete list and replacement instructions
+are documented in the root README.

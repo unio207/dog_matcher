@@ -171,12 +171,12 @@ const NEED_NOTES: Record<string, Partial<Record<Dim, string>>> = {
     dogExperience: "she pulls toward every dog she sees",
   },
   fog: {
-    patience: "she needs a gentle hand, not a loud one",
-    routineStability: "she wants the same quiet shape to every day",
-    homePresence: "she stops eating when she is alone too long",
-    activityLevel: "one short sprint a day is all she wants",
-    noiseTolerance: "she hides when the vacuum runs",
-    dogExperience: "she is clean, quiet and simple to live with",
+    patience: "she is affectionate but stubborn when a scent catches her",
+    routineStability: "she relaxes into a familiar, unhurried day",
+    homePresence: "she is pack-oriented and dislikes being alone too long",
+    activityLevel: "slow sniff-led walks and lots of lounge time are ideal",
+    noiseTolerance: "she prefers a calm home but will voice her opinions",
+    dogExperience: "food rewards work better than force when she digs in",
   },
 };
 

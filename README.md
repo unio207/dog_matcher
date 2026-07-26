@@ -534,7 +534,7 @@ full pipeline synchronously from that fixture, then open the requested page.
 
 ## Replacing dog images
 
-Put replacement `.jpg` files in:
+The demo’s current dog photos live in:
 
 [`public/dogs/`](./public/dogs/)
 

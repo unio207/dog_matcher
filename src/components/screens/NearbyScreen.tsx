@@ -74,6 +74,7 @@ function DogPhoto({
       src={dog.photo}
       alt={`${dog.name}, ${dog.breed}`}
       className={`${className} object-cover`}
+      style={{ objectPosition: dog.photoPosition ?? "center" }}
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : "auto"}
       onError={() => setFailed(true)}

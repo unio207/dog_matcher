@@ -125,6 +125,8 @@ export interface ShelterDog {
   distance: string;
   /** path under /public, e.g. "/dogs/campi.jpg" */
   photo: string;
+  /** CSS object-position used to focus a dog within a shared or wide photo. */
+  photoPosition?: string;
 }
 
 // ---------- Matching ----------
