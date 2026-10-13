@@ -1,211 +1,123 @@
-# Shepard
+<p align="center">
+  <img src="public/shepard-logo.png" alt="Shepard" width="120">
+</p>
+
+<h1 align="center">Shepard</h1>
 
 <p align="center">
-  <img src="public/shepard-logo.png" alt="Shepard logo" width="120" />
+  <em>Match people with shelter dogs by what the dog needs, read from how the person actually spends their week.</em>
 </p>
 
 <p align="center">
-  <strong>Find the dog whose needs fit the life you already live.</strong>
+  <a href="https://shepard-nine.vercel.app"><img src="https://img.shields.io/badge/demo-shepard--nine.vercel.app-ff5a5f" alt="Live demo"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
+  <img src="https://img.shields.io/badge/Next.js-16-black?logo=next.js" alt="Next.js 16">
+  <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black" alt="React 19">
+  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white" alt="TypeScript 5">
+  <img src="https://img.shields.io/badge/Three.js-0.185-black?logo=three.js" alt="Three.js 0.185">
+  <img src="https://img.shields.io/badge/tests-vitest-6E9F18?logo=vitest&logoColor=white" alt="Tests: Vitest">
 </p>
 
-Shepard is an intelligent dog-matching platform that turns a person’s real behavioral patterns into an explainable personality profile, creates an interactive 3D representation of their ideal companion, and matches them with compatible dogs available for adoption.
+<p align="center">
+  <b><a href="https://shepard-nine.vercel.app">Live demo</a></b> ·
+  <b><a href="https://youtu.be/-Jq7HaZ3RPo">Video</a></b>
+</p>
 
-Traditional adoption platforms begin with breed, size, or appearance. Shepard begins with compatibility: routine, energy, patience, presence, social rhythm, and the kind of support each dog actually needs.
+---
 
-## How Shepard works
+**Shepard** is a dog-adoption matcher for people who want a dog that fits the life they already have. It reads **behavioral metadata** from connected accounts (meeting density, free blocks, weekend load, after-hours activity), turns it into a six-trait **personality profile**, renders a **3D archetype dog** from that profile, and ranks real shelter dogs with an **asymmetric needs model**: the question is not "does this dog look like what you want?" but "can you consistently give this dog what it needs?"
 
-### 1. Connect your life
+This is a working demo. The main flow at `/` runs on five fixture personas and ten dogs (five real dogs from RRSK kennel cards in Korea, five synthetic San Francisco dogs). A separate page at `/merge-demo` connects a real Google Calendar through Merge.
 
-Users securely connect the services that reflect how they spend their time:
+<p align="center">
+  <img src="docs/images/meet-your-dog.jpg" alt="Shepard's Meet screen: a low-poly basset-like dog rendered in 3D for the homebody persona, with signal labels around it and a daily-rhythm card at 86%" width="800">
+</p>
 
-- Google Calendar
-- Google Drive
-- Slack
-- Gmail
-- Notion
-- Dropbox
-- Microsoft Teams
-- Jira
-- HubSpot
-- Salesforce
+## Demo
 
-Connections are handled through secure OAuth and Merge-powered integrations. Users choose exactly which sources Shepard can access and can disconnect or delete their data at any time.
+<p align="center">
+  <a href="https://youtu.be/-Jq7HaZ3RPo">
+    <img src="https://img.youtube.com/vi/-Jq7HaZ3RPo/maxresdefault.jpg" alt="Watch the Shepard demo video" width="640">
+  </a>
+  <br>
+  <sub>Demo video, click to watch on YouTube.</sub>
+</p>
 
-Shepard analyzes behavioral metadata—not the private meaning of personal messages or documents. Relevant signals include schedule density, working hours, response cadence, collaboration patterns, travel frequency, routine consistency, focus windows, and periods of home availability.
+## Features
 
-### 2. Understand your personality
+- **Behavior over self-report**: nine signals from Calendar, Slack and Drive (`src/lib/analyze.ts`) map to six traits by fixed weighted sums, and every trait carries the evidence strings that produced it.
+- **Deterministic dog genome**: `toGenome` maps the profile to 11 numeric shape parameters plus coat and accent color, with no randomness, so the same profile always yields the same dog.
+- **Interactive 3D companion**: React Three Fiber renders the genome on a low-poly dog model you can orbit and zoom.
+- **Needs-based matching**: each dog has six need values (patience, routine, home presence, activity, noise tolerance, dog experience). Shortfall is penalized harder than surplus, and home presence carries the largest weight (0.30).
+- **Explained results**: each match lists its strongest fits and its biggest gaps, with dog-specific notes taken from the kennel card, plus a short LLM explanation through Merge Gateway that falls back to a fixed sentence if no key is set.
+- **Isolated live Calendar lab**: `/merge-demo` signs in with Google, links Calendar through a Merge Agent Handler tool pack, and returns only aggregate timing signals.
 
-Shepard transforms connected activity into a clear behavioral profile describing the user’s real lifestyle.
-
-The profile measures:
-
-| Trait | What Shepard identifies |
-|---|---|
-| Patience | Response tempo, interruption patterns, and tolerance for changing demands |
-| Routine stability | How predictable the user’s days and weeks are |
-| Home presence | When and how consistently the user is available at home |
-| Activity level | Movement, scheduling, travel, and active-time patterns |
-| Social density | Collaboration frequency and the number of regular social interactions |
-| Household rhythm | Whether daily life is quiet, busy, spontaneous, or structured |
-| Adaptability | How the user responds to schedule changes and unexpected events |
-| Attention style | Preference for deep focus, frequent interaction, or flexible switching |
-
-Every result includes a concise explanation and an expandable evidence view showing which patterns contributed to the analysis.
-
-### 3. Meet your digital Shepard
-
-Shepard converts the personality profile into a multidimensional dog genome and generates a unique interactive 3D companion.
-
-The generated dog reflects qualities such as:
-
-- Energy
-- Affection
-- Independence
-- Sociability
-- Sensitivity
-- Trainability
-- Vocality
-- Curiosity
-- Adaptability
-- Scent drive
-- Preferred activity
-- Need for companionship
-
-The 3D viewer includes:
-
-- Orbit, zoom, and direct interaction
-- Animated breathing and idle movement
-- A dynamic technical grid and scanning overlay
-- Clickable anatomical feature points
-- Trait-to-feature connections
-- Coat, build, posture, and expression generation
-- Expandable genome explanations
-- Full reduced-motion and keyboard support
-
-The generated dog is a personality archetype: a visual way for users to understand the temperament and lifestyle needs most compatible with them.
-
-### 4. Find real dogs
-
-Shepard compares the user’s profile with behavioral and care information supplied by shelters and rescue organizations.
-
-Instead of asking whether a dog looks like the user’s preferred breed, the matching engine asks a more important question:
-
-> Can this person consistently provide what this dog needs?
-
-Each dog is evaluated across:
-
-- Required patience
-- Routine stability
-- Time at home
-- Exercise capacity
-- Noise sensitivity
-- Training experience
-- Social environment
-- Other-pet compatibility
-- Child compatibility
-- Medical and mobility requirements
-- Housing restrictions
-- Separation needs
-
-Hard constraints are applied first. Shepard then ranks compatible dogs using an asymmetric needs-based model: failing to meet a critical need is penalized more heavily than having extra capacity.
-
-Every result includes:
-
-- Overall compatibility score
-- Strongest compatibility factors
-- Potential challenges
-- Care requirements
-- Shelter-provided history
-- Medical and vaccination information
-- Distance and availability
-- A personalized explanation
-- Direct adoption or shelter-contact actions
-
-## Product journey
-
-1. **Connect** — Select and authorize behavioral data sources.
-2. **Analyze** — Watch Shepard build a privacy-preserving behavioral model.
-3. **Profile** — Review a concise personality summary and expandable evidence.
-4. **Create** — Generate a personalized dog genome.
-5. **Meet** — Explore the interactive 3D dog and its defining features.
-6. **Match** — Discover real adoptable dogs ranked by compatibility.
-7. **Connect with a shelter** — Review the dog’s full profile and begin the adoption process.
-
-## System architecture
+## How it works
 
 ```mermaid
 flowchart LR
-    A["Connected accounts"] --> B["Secure integration layer"]
-    B --> C["Behavioral signal processor"]
-    C --> D["Human personality profile"]
-    D --> E["Dog genome generator"]
-    E --> F["Interactive 3D companion"]
-
-    D --> G["Compatibility engine"]
-    H["Live shelter inventory"] --> G
-    G --> I["Explainable dog matches"]
-    I --> J["Shelter and adoption handoff"]
+    A["Merge source<br/>(fixture or live Calendar)"] --> B["9 behavioral signals"]
+    B --> C["analyze()<br/>6 traits + evidence"]
+    C --> D["toGenome()<br/>13-field dog genome"]
+    D --> E["DogViewer<br/>3D archetype"]
+    C --> F["match()<br/>needs model"]
+    G["Shelter dogs<br/>src/data/dogs.ts"] --> F
+    F --> H["Ranked matches<br/>+ reasons"]
+    H --> I["/api/explain<br/>Merge Gateway LLM"]
 ```
 
-## Explainable matching
+1. **Connect**: the user picks sources. Google Calendar, Google Drive and Slack are enabled; Gmail, Notion, Dropbox, Salesforce, HubSpot, Jira and Microsoft Teams are shown but disabled.
+2. **Analyze**: `/api/profile` returns raw signals. The default source is a fixture persona; `DATA_SOURCE=live` pulls 30 days of Calendar events and falls back to the fixture on any error.
+3. **Profile**: `analyze()` produces activity level, home presence, routine stability, household noise, patience and social density, each in 0 to 1 with evidence.
+4. **Generate**: `toGenome()` sets body, leg, head, ear, snout and tail proportions, fluffiness, posture and coat color from those traits.
+5. **Match**: `match()` scores every dog on its six needs, maps the score into 8 to 99.9, and builds up to three reasons per dog.
+6. **Meet nearby**: matches show photos, breed, character notes from the kennel card, location and the LLM explanation.
 
-Shepard never presents a compatibility score without context.
+<p align="center">
+  <img src="docs/images/matches.jpg" alt="Match screen for the homebody persona: Fog, a basset hound, as best match at 91%, followed by Kimbop 90%, Meter 85%, Sierra 83% and Indigo 79%" width="800">
+  <br>
+  <sub>Match screen for the <code>homebody</code> fixture persona on the live demo.</sub>
+</p>
 
-The matching system preserves the factors behind every recommendation, allowing users and shelters to understand:
+All scoring is computed once, synchronously, as soon as the raw data exists (`computeAll` in `src/lib/flow.ts`). The analyzing and generating screens are timed reveals over results that are already done (12 s and 14 s). The penalty slopes in `src/lib/match.ts` were tuned so the five fixture personas land on five different dogs; they are not fitted to adoption outcomes.
 
-- What makes the pairing strong
-- Which needs require special attention
-- Which user behaviors support the recommendation
-- Whether any risks or constraints remain
-- Why another dog ranked lower
+## Live Calendar integration
 
-AI-generated summaries make the analysis approachable, while the underlying deterministic scoring model keeps rankings stable, inspectable, and testable.
+`/merge-demo` is kept separate so the fixture-backed flow at `/` stays reliable. It needs Google OAuth plus a Merge Agent Handler tool pack containing the `google-calendar` connector and its read-only `list_events` tool.
 
-## Shelter platform
+Each signed-in person gets a pseudonymous, isolated Merge Registered User, derived from their Google ID with `MERGE_USER_ID_SECRET`. The browser receives a short-lived, single-use Link token plus an encrypted, HttpOnly, user-bound handle used for profile and deletion requests. The server reads a bounded 30-day window, reduces events to aggregate timing signals right away, and returns no event titles, descriptions, locations, attendee identities, plaintext Merge user IDs or MCP URLs. Slack and Drive signals on that page are labeled as samples.
 
-Shelters can manage and synchronize:
+The included rate limiter is per process. A public deployment also needs a distributed edge or platform rate limit, and one full smoke test (Google sign-in, Calendar Link, aggregate profile, account deletion) after installing secrets.
 
-- Available dogs
-- Behavioral assessments
-- Care notes
-- Medical information
-- Adoption status
-- Home requirements
-- Compatibility constraints
-- Location and application links
+## Tech stack
 
-Dog availability updates automatically, preventing unavailable animals from appearing in active recommendations. Shelter staff can review the compatibility factors accompanying an inquiry before beginning the adoption process.
+| Layer | Technology |
+|---|---|
+| Frontend | Next.js 16 (App Router), React 19, TypeScript 5, Tailwind CSS 4, Motion |
+| 3D | Three.js 0.185, React Three Fiber, drei |
+| Integrations | Merge Agent Handler (MCP), `@mergeapi/react-agent-handler-link`, NextAuth 4 with Google OAuth |
+| Explanations | Merge Gateway (OpenAI-compatible chat completions) |
+| Tests | Vitest |
 
-## Privacy and security
+## Project structure
 
-Shepard is built around informed consent and data minimization.
+```
+.
+├── src/
+│   ├── app/             routes: / flow, /merge-demo, /dev harness, /api/*
+│   ├── components/      flow shell, 3D DogViewer, one component per screen
+│   ├── lib/             analyze, genome, match, gateway, Merge sources, merge-demo security
+│   ├── data/            shelter dogs and fixture personas
+│   └── types/           shared types
+├── public/
+│   ├── dogs/            dog photos, named by dog id
+│   └── models/          low-poly dog glTF model and textures
+└── docs/                README screenshots, Merge demo spec and plan
+```
 
-- Connections use OAuth; Shepard never receives account passwords.
-- Every data source is independently authorized and revocable.
-- Raw personal content is not retained.
-- Behavioral metadata is converted into limited derived signals.
-- Credentials and access tokens are encrypted.
-- Data is encrypted in transit and at rest.
-- Users can inspect connected sources and stored profile data.
-- Account deletion removes profiles, derived signals, and connection records.
-- Personal data is never sold or used for advertising.
-- Shelter partners only receive information the user explicitly shares.
+## Getting started
 
-## Technology
-
-Shepard is built with:
-
-- Next.js and React
-- TypeScript
-- Motion for fluid, interruptible animation
-- Three.js and React Three Fiber for interactive 3D
-- Merge for secure integration infrastructure
-- Explainable AI for personalized analysis
-- A deterministic multidimensional compatibility engine
-- Live shelter and rescue inventory integrations
-- Automated unit, integration, accessibility, and end-to-end testing
-
-## Local development
+**Requirements:** Node.js 20+ and npm.
 
 ```bash
 git clone https://github.com/unio207/dog_matcher.git
@@ -215,70 +127,42 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000). With an empty `.env.local` the main flow runs on fixtures and the fixed fallback explanation.
 
-### Separate live Calendar integration
-
-The production-shaped Merge integration is isolated at
-[http://localhost:3000/merge-demo](http://localhost:3000/merge-demo), so the
-fixture-backed presentation at `/` remains reliable.
-
-The page requires Google OAuth plus a Merge Agent Handler Tool Pack containing
-the `google-calendar` connector and its read-only `list_events` tool. Copy
-`.env.example` to `.env.local` and configure:
-
-- `AUTH_SECRET`, `AUTH_GOOGLE_ID`, and `AUTH_GOOGLE_SECRET`;
-- `MERGE_AGENT_HANDLER_KEY` and `MERGE_TOOL_PACK_ID`; and
-- an independent, random `MERGE_USER_ID_SECRET` of at least 32 characters.
-
-Use `/api/auth/callback/google` as the Google OAuth callback path. Add both the
-local URL and the deployed HTTPS URL to Google Cloud. Never commit `.env.local`
-or paste credentials into client-side variables. Set `NEXTAUTH_URL` to the
-canonical public HTTPS origin in every proxied deployment so same-origin checks
-do not rely on an internal proxy URL.
-
-Each signed-in person receives a pseudonymous, isolated Merge Registered User.
-The browser receives a short-lived, single-use Link token plus an encrypted,
-HttpOnly, user-bound handle needed for profile and deletion requests. The
-server calls Calendar for a bounded 30-day window, immediately reduces events
-to aggregate timing signals, and returns no event titles, descriptions,
-locations, attendee identities, plaintext Merge user IDs, or MCP URLs. Slack
-and Drive remain visibly labeled sample signals on this page.
-
-For a public deployment, enable a distributed edge or platform rate limit in
-addition to the included per-process guard. After installing deployment
-secrets, complete one real Google sign-in, Calendar Link, aggregate-profile, and
-account-deletion smoke test before sharing the URL.
-
-Run validation with:
+`.env.local` takes these variables (see `.env.example` for what each one does):
 
 ```bash
-npm test
-npx tsc --noEmit
-npm run build
+DATA_SOURCE=                    # "fixture" (default) or "live"
+FIXTURE_PERSONA=
+MERGE_AGENT_HANDLER_KEY=
+MERGE_TOOL_PACK_ID=
+MERGE_REGISTERED_USER_ID=
+MERGE_AGENT_HANDLER_BASE_URL=
+MERGE_CALENDAR_TOOL_NAME=
+AUTH_SECRET=
+AUTH_GOOGLE_ID=
+AUTH_GOOGLE_SECRET=
+NEXTAUTH_URL=                   # canonical public HTTPS origin behind a proxy
+MERGE_USER_ID_SECRET=           # independent of AUTH_SECRET, 32+ characters
+MERGE_GATEWAY_KEY=
+MERGE_GATEWAY_BASE_URL=
+MERGE_GATEWAY_MODEL=
 ```
 
-## Design principles
+For `/merge-demo`, use `/api/auth/callback/google` as the Google OAuth callback path and add both the local URL and the deployed HTTPS URL in Google Cloud. Never commit `.env.local` or put credentials in client-side variables.
 
-Shepard follows five product principles:
+### Useful scripts
 
-1. **Needs before aesthetics**  
-   Compatibility matters more than breed preference or appearance.
+```bash
+npm test                                      # Vitest unit tests
+npx tsc --noEmit                              # type check
+npm run build                                 # production build
+```
 
-2. **Behavior before self-reporting**  
-   Real patterns provide a stronger foundation than a one-time personality quiz.
+`/dev` lets you jump to any screen for any persona (`/?state=profile&persona=homebody`), and `/dev/genome` has sliders for each genome parameter.
 
-3. **Explanation before persuasion**  
-   Users should understand why a recommendation exists.
+## License
 
-4. **Consent before analysis**  
-   Every connected source is optional, visible, and revocable.
+[MIT](LICENSE) © Henry Zou
 
-5. **Long-term fit before fast adoption**  
-   The goal is a stable relationship that works for both the person and the dog.
-
-## Mission
-
-Shepard exists to make dog adoption more human, more explainable, and more likely to last.
-
-The best dog is not simply the one someone wants at first glance. It is the one whose needs fit the care, energy, patience, and companionship that person can sustainably provide.
+The MIT license covers the code. The 3D dog is based on ["low poly dog pack"](https://sketchfab.com/3d-models/low-poly-dog-pack-b27eaa571da14c3b93bf664fe7d950c8) by [compost the second](https://sketchfab.com/compostthesecond), licensed under [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/); see [`public/models/low_poly_dog_pack/license.txt`](public/models/low_poly_dog_pack/license.txt). Real dog profiles and photos come from RRSK kennel cards.
