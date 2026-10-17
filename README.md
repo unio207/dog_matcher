@@ -15,7 +15,7 @@
   <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black" alt="React 19">
   <img src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white" alt="TypeScript 5">
   <img src="https://img.shields.io/badge/Three.js-0.185-black?logo=three.js" alt="Three.js 0.185">
-  <img src="https://img.shields.io/badge/tests-vitest-6E9F18?logo=vitest&logoColor=white" alt="Tests: Vitest">
+  <img src="https://img.shields.io/badge/tests-83_passing-6E9F18?logo=vitest&logoColor=white" alt="Tests: 83 passing (Vitest, run locally)">
 </p>
 
 <p align="center">
@@ -47,7 +47,7 @@ This is a working demo. The main flow at `/` runs on five fixture personas and t
 
 - **Behavior over self-report**: nine signals from Calendar, Slack and Drive (`src/lib/analyze.ts`) map to six traits by fixed weighted sums, and every trait carries the evidence strings that produced it.
 - **Deterministic dog genome**: `toGenome` maps the profile to 11 numeric shape parameters plus coat and accent color, with no randomness, so the same profile always yields the same dog.
-- **Interactive 3D companion**: React Three Fiber renders the genome on a low-poly dog model you can orbit and zoom.
+- **3D genome render**: React Three Fiber applies the genome's proportions, fluffiness, posture and coat color to a low-poly glTF dog, with drei `OrbitControls` for orbit and zoom.
 - **Needs-based matching**: each dog has six need values (patience, routine, home presence, activity, noise tolerance, dog experience). Shortfall is penalized harder than surplus, and home presence carries the largest weight (0.30).
 - **Explained results**: each match lists its strongest fits and its biggest gaps, with dog-specific notes taken from the kennel card, plus a short LLM explanation through Merge Gateway that falls back to a fixed sentence if no key is set.
 - **Isolated live Calendar lab**: `/merge-demo` signs in with Google, links Calendar through a Merge Agent Handler tool pack, and returns only aggregate timing signals.
@@ -67,7 +67,7 @@ flowchart LR
 ```
 
 1. **Connect**: the user picks sources. Google Calendar, Google Drive and Slack are enabled; Gmail, Notion, Dropbox, Salesforce, HubSpot, Jira and Microsoft Teams are shown but disabled.
-2. **Analyze**: `/api/profile` returns raw signals. The default source is a fixture persona; `DATA_SOURCE=live` pulls 30 days of Calendar events and falls back to the fixture on any error.
+2. **Analyze**: `/api/profile` returns raw signals. The default source is a fixture persona; `DATA_SOURCE=live` pulls 30 days of Calendar events and falls back to the fixture on any error. Slack and Drive signals stay fixture values even in live mode.
 3. **Profile**: `analyze()` produces activity level, home presence, routine stability, household noise, patience and social density, each in 0 to 1 with evidence.
 4. **Generate**: `toGenome()` sets body, leg, head, ear, snout and tail proportions, fluffiness, posture and coat color from those traits.
 5. **Match**: `match()` scores every dog on its six needs, maps the score into 8 to 99.9, and builds up to three reasons per dog.
@@ -83,7 +83,7 @@ All scoring is computed once, synchronously, as soon as the raw data exists (`co
 
 ## Live Calendar integration
 
-`/merge-demo` is kept separate so the fixture-backed flow at `/` stays reliable. It needs Google OAuth plus a Merge Agent Handler tool pack containing the `google-calendar` connector and its read-only `list_events` tool.
+`/merge-demo` is kept separate so the flow at `/` never depends on OAuth or a Merge outage. It needs Google OAuth plus a Merge Agent Handler tool pack containing the `google-calendar` connector and its read-only `list_events` tool.
 
 Each signed-in person gets a pseudonymous, isolated Merge Registered User, derived from their Google ID with `MERGE_USER_ID_SECRET`. The browser receives a short-lived, single-use Link token plus an encrypted, HttpOnly, user-bound handle used for profile and deletion requests. The server reads a bounded 30-day window, reduces events to aggregate timing signals right away, and returns no event titles, descriptions, locations, attendee identities, plaintext Merge user IDs or MCP URLs. Slack and Drive signals on that page are labeled as samples.
 
@@ -105,6 +105,8 @@ The included rate limiter is per process. A public deployment also needs a distr
 .
 ├── src/
 │   ├── app/             routes: / flow, /merge-demo, /dev harness, /api/*
+│   ├── auth.ts          NextAuth config for /merge-demo
+│   ├── proxy.ts         request proxy and CSP
 │   ├── components/      flow shell, 3D DogViewer, one component per screen
 │   ├── lib/             analyze, genome, match, gateway, Merge sources, merge-demo security
 │   ├── data/            shelter dogs and fixture personas
@@ -117,7 +119,7 @@ The included rate limiter is per process. A public deployment also needs a distr
 
 ## Getting started
 
-**Requirements:** Node.js 20+ and npm.
+**Requirements:** Node.js 20.9+ (required by Next.js 16) and npm.
 
 ```bash
 git clone https://github.com/unio207/dog_matcher.git
@@ -154,7 +156,7 @@ For `/merge-demo`, use `/api/auth/callback/google` as the Google OAuth callback 
 ### Useful scripts
 
 ```bash
-npm test                                      # Vitest unit tests
+npm test                                      # Vitest: 9 files, 83 tests
 npx tsc --noEmit                              # type check
 npm run build                                 # production build
 ```
